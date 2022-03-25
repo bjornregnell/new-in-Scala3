@@ -4,7 +4,7 @@
 
 @main def run = 
   println(slides.show)
-  slides.mkLatex()
+  slides.toPdf()
 
 def slides: Tree = document("New in Scala 3"):
   frame("New in Scala 3"):
