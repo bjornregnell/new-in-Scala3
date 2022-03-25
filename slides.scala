@@ -1,5 +1,6 @@
-//run in terminal with scala-cli from https://scala-cli.virtuslab.org/install
-//scala-cli run --watch . -S 3.nightly -language:experimental.fewerBraces  
+// run with scala-cli from https://scala-cli.virtuslab.org/install
+// by typing this command in terminal
+// scala-cli run --watch . -S 3.nightly -language:experimental.fewerBraces  
 
 @main def run = 
   println(slides.show)
