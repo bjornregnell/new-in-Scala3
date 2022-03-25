@@ -1,24 +1,62 @@
-extension (s: String)
-  def save(path: String): Unit = 
+def loadLines(path: String): Seq[String] =               // top-level definition
+  io.Source.fromFile(path, "UTF-8").getLines.toSeq 
+
+def selectLines(path: String)(fromUntil: (String, String)): Seq[String] = 
+  val (from, until) = (fromUntil(0).trim, fromUntil(1).trim)  // apply on tuples
+  val xs = loadLines(path).dropWhile(! _.trim.startsWith(from))
+  xs.take(1) ++ xs.drop(1).takeWhile(x => 
+    if until.isEmpty then x.trim.nonEmpty                  // new control syntax
+    else ! x.trim.startsWith(until)
+  )
+
+def createDirs(path: String): Boolean = 
+  java.io.File(path).mkdirs()             // creator applicators, new not needed
+
+extension (s: String) def save(path: String): Unit =        // extension methods
     val pw = java.io.PrintWriter(java.io.File(path), "UTF-8")
     try pw.write(s) finally pw.close()
 
-enum Tag:
+enum Tag:          // scalable enums, from simple to generic algebraic datatypes
   case Document, Frame, Itemize, Enumerate, Paragraph
 
-export Tag.*
+export Tag.*            // tailor your namespace and api, no need for forwarders
 
-open class Tree(var tag: Tag, var value: String):
+case class LatexPreamble(value: String)
+object LatexPreamble:
+  given LatexPreamble = simpleFrames        //given values: cleaned-up implicits
+
+  def simpleFrames = LatexPreamble(s"""
+    |\\documentclass{beamer}
+    |
+    |\\beamertemplatenavigationsymbolsempty
+    |\\setbeamertemplate{footline}[frame number] 
+    |\\setbeamercolor{page number in head/foot}{fg=gray} 
+    |\\usepackage[swedish]{babel}
+    |
+    |\\usepackage[utf8]{inputenc}
+    |\\usepackage[T1]{fontenc}
+    |\\usepackage[scaled=0.95]{beramono} % inconsolata or beramono ???
+    |\\usepackage[scale=0.9]{tgheros}
+    |\\newenvironment{Frame}[2][]
+    |  {\\begin{frame}[fragile,environment=Frame,#1]{#2}}
+    |  {\\end{frame}} 
+    |""".stripMargin
+  ) 
+end LatexPreamble                        //end markers are check by the compiler
+
+
+open class Tree(var tag: Tag, var value: String):   //open classes allow extends 
   val sub = collection.mutable.Buffer[Tree]() 
 
-type TreeContext = Tree ?=> Unit
+type TreeContext = Tree ?=> Unit              // abstract over context functions
 
-def root(tag: Tag, value: String)(body: TreeContext): Tree = 
+def root(tag: Tag, value: String)(body: TreeContext): Tree =   //builder-pattern
   given t: Tree = Tree(tag, value)
   body
   t
 
-def leaf(tag: Tag, value: String): TreeContext = summon[Tree].sub += Tree(tag, value)
+def leaf(tag: Tag, value: String): TreeContext = 
+  summon[Tree].sub += Tree(tag, value)
 
 def branch(tag: Tag, value: String = "")(body: TreeContext): TreeContext = 
   val subTree = Tree(tag, value)
@@ -44,44 +82,7 @@ extension (t: Tree)
   def mkLatex(output: String = "output", workDir: String = "target/tex/"): Unit = 
     Latex.mk(t, output, workDir)
 
-def loadLines(path: String): Seq[String] = 
-  io.Source.fromFile(path, "UTF-8").getLines.toSeq 
-
-def selectLines(path: String)(fromUntil: (String, String)): Seq[String] = 
-  val (from, until) = (fromUntil._1.trim, fromUntil._2.trim)
-  val xs = loadLines(path).dropWhile(! _.trim.startsWith(from))
-  xs.take(1) ++ xs.drop(1).takeWhile(x => 
-    if until.isEmpty then x.trim.nonEmpty 
-    else ! x.trim.startsWith(until)
-  )
-  
-def createDirs(path: String): Boolean = java.io.File(path).mkdirs()
-
 object Latex:
-
-  case class LatexPreamble(value: String)
-  object LatexPreamble:
-    given defaultLatexPreamble: LatexPreamble = simpleFrames
-
-    def simpleFrames = LatexPreamble(s"""
-      |\\documentclass{beamer}
-      |
-      |\\beamertemplatenavigationsymbolsempty
-      |\\setbeamertemplate{footline}[frame number] 
-      |\\setbeamercolor{page number in head/foot}{fg=gray} 
-      |\\usepackage[swedish]{babel}
-      |
-      |\\usepackage[utf8]{inputenc}
-      |\\usepackage[T1]{fontenc}
-      |\\usepackage[scaled=0.95]{beramono} % inconsolata or beramono ???
-      |\\usepackage[scale=0.9]{tgheros}
-      |\\newenvironment{Frame}[2][]
-      |  {\\begin{frame}[fragile,environment=Frame,#1]{#2}}
-      |  {\\end{frame}} 
-      |""".stripMargin
-    ) 
-  end LatexPreamble
-
   def fromTree(tree: Tree): String =
     def loop(t: Tree): String =
       inline def tail: String = t.sub.map(loop).mkString
