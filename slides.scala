@@ -10,6 +10,7 @@ def slides: Tree = document("New in Scala 3"):
   frame("New in Scala 3"):
     itemize:
       p("My favorite new stuff in Scala 3")
-      p("another paragraph")
-
-
+      p("another item")
+      enumerate:
+        p("subitem one")
+        p("subitem two")
