@@ -19,7 +19,7 @@ extension (s: String) def save(path: String): Unit =        // extension methods
     try pw.write(s) finally pw.close()
 
 enum Tag:          // scalable enums, from simple to generic algebraic datatypes
-  case Document, Frame, Itemize, Enumerate, Paragraph
+  case Document, Frame, Itemize, Enumerate, Paragraph, Code
 
 export Tag.*            // tailor your namespace and api, no need for forwarders
 
@@ -79,6 +79,7 @@ def itemize(body: TreeContext): TreeContext = branch(Itemize)(body)
 def enumerate(body: TreeContext): TreeContext = branch(Enumerate)(body)
 def frame(title: String)(body: TreeContext): TreeContext = branch(Frame, title)(body)
 def p(text: String): TreeContext = leaf(Paragraph, text)
+def code(text: String): TreeContext = leaf(Code, text)
 
 object Latex:
   def fromTree(tree: Tree): String =
@@ -86,13 +87,13 @@ object Latex:
       inline def tail: String = t.sub.map(loop).mkString
       t.tag match
         case Document  => env("document")(tail)
-        case Frame     => envArg("frame")(t.value)(tail)
-        case Paragraph => s"${t.value}$tail\n"
+        case Frame     => envArg("frame")(t.value.replaceAllMarkers)(tail)
+        case Paragraph => s"${t.value.replaceAllMarkers}$tail\n"
         case Itemize | Enumerate => 
           val body = t.sub.map(
             _ match 
               case st if st.tag == Paragraph => 
-                  s"\\item ${st.value}\n" ++ st.sub.map(loop).mkString
+                  s"\\item ${st.value.replaceAllMarkers}\n" ++ st.sub.map(loop).mkString
               case st if st.tag == Itemize || st.tag == Enumerate => loop(st) 
               case st => throw Exception(s"illegal tag inside ${t.tag}: ${st.tag}")
           )
@@ -120,6 +121,18 @@ object Latex:
   def envArg(environment: String)(args: String*)(body: String): String = 
     s"\n\\begin{$environment}${braces(args*)}\n$body\\end{$environment}\n\n"
 
+  def beginEndPattern(s: String) = s"$s([^$s]*)$s".r
+  val replacePatterns = Map[util.matching.Regex, (String, String)](
+    beginEndPattern("\\*\\*") -> ("\\\\textbf{", "}"),
+    beginEndPattern("\\*") -> ("\\\\textit{", "}"),
+    beginEndPattern("\\`") -> ("\\\\texttt{", "}"),
+  )
+  extension (s: String) def replaceAllMarkers: String = 
+    var result = s
+    for (pattern, (b, e)) <- replacePatterns do
+      result = pattern.replaceAllIn(result, m => s"$b${m.group(1)}$e")
+    result
+ 
   def make(tree: Tree, out: String, workDir: String)(using pre: Preamble): Int = 
     import scala.sys.process.{Process  => OSProc}
     createDirs(workDir)
