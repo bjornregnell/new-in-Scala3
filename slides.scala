@@ -31,7 +31,7 @@ def slides = document("New in Scala 3"):
         p("ScalaJS (both browser and nodeJS)")
         p("Scala Native (pre-compiled binaries, with C/C++ interop)")
 
-      p("A main-stream language with a large open-source library ecosystem and wide-spread use in industry")
+    p("A main-stream language with a large open-source library ecosystem and wide-spread use in industry")
       itemize:
         p("Netflix, Twitter, LinkedIn, Spotify, Klarna, Zalando, ...")
 
