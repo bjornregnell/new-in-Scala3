@@ -1,6 +1,4 @@
 //> using scala "3.nightly"
-// run in terminal with https://scala-cli.virtuslab.org/install
-// scala-cli run --watch . 
 
 import scala.language.experimental.fewerBraces
 
