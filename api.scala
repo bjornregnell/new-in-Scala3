@@ -3,13 +3,13 @@
 def loadLines(path: String): Seq[String] =               // top-level definition
   io.Source.fromFile(path, "UTF-8").getLines.toSeq 
 
-def selectLines(path: String)(fromUntil: (String, String)): Seq[String] = 
+def select(path: String)(fromUntil: (String, String)): String = 
   val (from, until) = (fromUntil(0).trim, fromUntil(1).trim)  // apply on tuples
   val xs = loadLines(path).dropWhile(! _.trim.startsWith(from))
-  xs.take(1) ++ xs.drop(1).takeWhile(x => 
+  (xs.take(1) ++ xs.drop(1).takeWhile(x => 
     if until.isEmpty then x.trim.nonEmpty                  // new control syntax
     else ! x.trim.startsWith(until)
-  )
+  )).mkString("\n")
 
 def createDirs(path: String): Boolean = 
   java.io.File(path).mkdirs()         // universal apply methods: new not needed
@@ -44,19 +44,7 @@ case class Preamble(value: String)
 object Preamble:
   given Preamble = simpleFrames             //given values: cleaned-up implicits
 
-  def simpleFrames = Preamble(s"""
-    |\\documentclass{beamer}
-    |
-    |\\beamertemplatenavigationsymbolsempty
-    |\\setbeamertemplate{footline}[frame number] 
-    |\\setbeamercolor{page number in head/foot}{fg=gray} 
-    |
-    |\\usepackage[swedish]{babel}
-    |\\usepackage[utf8]{inputenc}
-    |\\usepackage[T1]{fontenc}
-    |\\usepackage{tgheros, beramono}
-    |""".stripMargin
-  ) 
+  def simpleFrames = Preamble(loadLines("preamble.tex").mkString("\n")) 
 end Preamble                           //end markers are checked by the compiler
 
 type TreeContext = Tree ?=> Unit              // abstract over context functions
@@ -87,7 +75,7 @@ object Latex:
       inline def tail: String = t.sub.map(loop).mkString
       t.tag match
         case Document  => env("document")(s"\\title{${t.value}}\\maketitle\n$tail")
-        case Frame     => envArg("frame")(t.value.replaceAllMarkers)(tail)
+        case Frame     => envArg("frame")("fragile")(t.value.replaceAllMarkers)(tail)
         case Paragraph => s"${t.value.replaceAllMarkers}$tail\n"
         case Itemize | Enumerate => 
           val body = t.sub.map(
@@ -99,6 +87,7 @@ object Latex:
           )
           val listEnv = if t.tag == Itemize then "itemize" else "enumerate"
           env(listEnv)(body.mkString)
+        case Code => env("Scala")(t.value)
     loop(tree)
 
   def brackets(params: String*): String = 
@@ -116,10 +105,10 @@ object Latex:
     s"\\$command${brackets(opts*)}${braces(args*)}"
 
   def env(environment: String)(body: String): String = 
-    s"\n\\begin{$environment}\n$body\\end{$environment}\n\n"
+    s"\n\\begin{$environment}\n$body\n\\end{$environment}\n\n"
 
-  def envArg(environment: String)(args: String*)(body: String): String = 
-    s"\n\\begin{$environment}${braces(args*)}\n$body\\end{$environment}\n\n"
+  def envArg(environment: String)(bracketArgs: String*)(braceArgs: String*)(body: String): String = 
+    s"\n\\begin{$environment}${brackets(bracketArgs*)}${braces(braceArgs*)}\n$body\n\\end{$environment}\n\n"
 
   def beginEndPattern(s: String) = s"$s([^$s]*)$s".r
   val replacePatterns = Map[util.matching.Regex, (String, String)](

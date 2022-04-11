@@ -13,6 +13,9 @@ def slides = document("Interesting Scala 3 goodies"):
      p("Help you get started with Scala")
      p("Illustrated by a DSL for slides (these slides...)")
 
+  frame("Example DSL implemented in Scala 3"):
+    code(select("slides.scala")("@main" -> "frame(\"Bac"))
+
   frame("Background: What is Scala?"):
     itemize:
       p("A general-purpose programming language")
