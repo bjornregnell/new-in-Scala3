@@ -7,7 +7,7 @@ import scala.language.experimental.fewerBraces
 def slides = document("Scala 3 goodies"):
   frame("Goals"):
     itemize:
-      p("Showcase new things in Scala 3")
+      p("Showcase cool new things in Scala 3")
       p("Help you get started with Scala")
       p("Illustrated by Scala 3 DSL for these slides")
       p("https://github.com/bjornregnell/new-in-Scala3")
