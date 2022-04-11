@@ -15,7 +15,7 @@ A quick tour of selected new stuff in Scala 3.
 scala-cli run . 
 ```
 
-* If you have `latexmk` on your path then you can now find the [slides](https://github.com/bjornregnell/new-in-Scala3/blob/main/slides.scala) in `target`
+* If you have `latexmk` on your path then you can now find the [slides](https://github.com/bjornregnell/new-in-Scala3/blob/main/slides.scala) compiled to pdf in `target`
 
 * Look at the [source](https://github.com/bjornregnell/new-in-Scala3/blob/main/api.scala) to see Scala 3 in action.
 source
