@@ -1,4 +1,4 @@
-// https://docs.scala-lang.org/scala3/new-in-scala3.html
+//> using scala "3.nightly"
 
 def loadLines(path: String): Seq[String] =               // top-level definition
   io.Source.fromFile(path, "UTF-8").getLines.toSeq 
@@ -86,7 +86,7 @@ object Latex:
     def loop(t: Tree): String =
       inline def tail: String = t.sub.map(loop).mkString
       t.tag match
-        case Document  => env("document")(tail)
+        case Document  => env("document")(s"\\title{${t.value}}\\maketitle\n$tail")
         case Frame     => envArg("frame")(t.value.replaceAllMarkers)(tail)
         case Paragraph => s"${t.value.replaceAllMarkers}$tail\n"
         case Itemize | Enumerate => 
