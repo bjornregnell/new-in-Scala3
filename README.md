@@ -17,5 +17,5 @@ scala-cli run .
 
 * If you have `latexmk` on your path then you can now find the slides in `target`
 
-* Look at the source to see Scala 3 in action.
+* Look at the [source](https://github.com/bjornregnell/new-in-Scala3/blob/main/api.scala) to see Scala 3 in action.
 
