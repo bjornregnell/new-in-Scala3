@@ -12,7 +12,7 @@ A quick tour of selected new stuff in Scala 3.
 
 * Run this in terminal:
 ```
-scala-cli run --watch . -S 3.nightly -language:experimental.fewerBraces  
+scala-cli run . 
 ```
 
 * If you have `latexmk` on your path then you can now find the slides in `target`
