@@ -3,7 +3,7 @@
 def loadLines(path: String): Seq[String] =               // top-level definition
   io.Source.fromFile(path, "UTF-8").getLines.toSeq 
 
-def select(path: String)(fromUntil: (String, String)): String = 
+def selectFrom(path: String)(fromUntil: (String, String)): String = 
   val (from, until) = (fromUntil(0).trim, fromUntil(1).trim)  // apply on tuples
   val xs = loadLines(path).dropWhile(! _.trim.startsWith(from))
   (xs.take(1) ++ xs.drop(1).takeWhile(x => 
@@ -14,7 +14,7 @@ def select(path: String)(fromUntil: (String, String)): String =
 def createDirs(path: String): Boolean = 
   java.io.File(path).mkdirs()         // universal apply methods: new not needed
 
-extension (s: String) def save(path: String): Unit =        // extension methods
+extension (s: String) def saveTo(path: String): Unit =      // extension methods
     val pw = java.io.PrintWriter(java.io.File(path), "UTF-8")
     try pw.write(s) finally pw.close()
 
@@ -42,9 +42,9 @@ extension (t: Tree)                              // collective extension methods
 
 case class Preamble(value: String)
 object Preamble:
-  given Preamble = simpleFrames             //given values: cleaned-up implicits
+  given Preamble = loadPreamble()           //given values: cleaned-up implicits
 
-  def simpleFrames = Preamble(loadLines("preamble.tex").mkString("\n")) 
+  def loadPreamble() = Preamble(loadLines("preamble.tex").mkString("\n")) 
 end Preamble                           //end markers are checked by the compiler
 
 type TreeContext = Tree ?=> Unit              // abstract over context functions
@@ -68,6 +68,8 @@ def enumerate(body: TreeContext): TreeContext = branch(Enumerate)(body)
 def frame(title: String)(body: TreeContext): TreeContext = branch(Frame, title)(body)
 def p(text: String): TreeContext = leaf(Paragraph, text)
 def code(text: String): TreeContext = leaf(Code, text)
+def codeFrom(file: String)(fromUntil: (String, String)): TreeContext = 
+  code(selectFrom(file)(fromUntil))
 
 object Latex:
   def fromTree(tree: Tree): String =
@@ -87,7 +89,7 @@ object Latex:
           )
           val listEnv = if t.tag == Itemize then "itemize" else "enumerate"
           env(listEnv)(body.mkString)
-        case Code => env("Scala")(t.value)
+        case Code => env("Scala")(t.value.minimizeMargin)
     loop(tree)
 
   def brackets(params: String*): String = 
@@ -111,24 +113,33 @@ object Latex:
     s"\n\\begin{$environment}${brackets(bracketArgs*)}${braces(braceArgs*)}\n$body\n\\end{$environment}\n\n"
 
   def beginEndPattern(s: String) = s"$s([^$s]*)$s".r
+
   val replacePatterns = Map[util.matching.Regex, (String, String)](
     beginEndPattern("\\*\\*") -> ("\\\\textbf{", "}"),
-    beginEndPattern("\\*") -> ("\\\\textit{", "}"),
-    beginEndPattern("\\`") -> ("\\\\texttt{", "}"),
+    beginEndPattern("\\*")    -> ("\\\\textit{", "}"),
+    beginEndPattern("\\`")    -> ("\\\\texttt{", "}"),
   )
-  extension (s: String) def replaceAllMarkers: String = 
-    var result = s
-    for (pattern, (b, e)) <- replacePatterns do
-      result = pattern.replaceAllIn(result, m => s"$b${m.group(1)}$e")
-    result
+
+  extension (s: String) 
+    def replaceAllMarkers: String = 
+      var result = s
+      for (pattern, (b, e)) <- replacePatterns do
+        result = pattern.replaceAllIn(result, m => s"$b${m.group(1)}$e")
+      result
+
+    def minimizeMargin: String = 
+      val xs = s.split("\n")
+      val minMargin = xs.filter(_.nonEmpty).map(_.takeWhile(_.isWhitespace).length).minOption.getOrElse(0)
+      xs.map(_.drop(minMargin)).mkString("\n")
+  end extension
  
   def make(tree: Tree, out: String, workDir: String)(using pre: Preamble): Int = 
-    import scala.sys.process.{Process  => OSProc}
+    import scala.sys.process.{Process  => OSProc}               // rename import
     createDirs(workDir)
-    (pre.value ++ tree.toLatex).save(s"$workDir/$out.tex")
+    (pre.value ++ tree.toLatex).saveTo(s"$workDir/$out.tex")
     val wd = java.io.File(workDir)
-    val proc = OSProc(Seq("latexmk", "-pdf", "-cd", "-halt-on-error", "-silent", s"$out.tex"), wd)
-    val procOutputFile = java.io.File(s"$workDir/$out.log")
-    val result = proc.#>(procOutputFile).run.exitValue
-    if result == 0 then println(s"Latex output generated in $workDir")
-    result
+      val proc = OSProc(Seq("latexmk", "-pdf", "-cd", "-halt-on-error", "-silent", s"$out.tex"), wd)
+      val procOutputFile = java.io.File(s"$workDir/$out.log")
+      val result = proc.#>(procOutputFile).run.exitValue
+      if result == 0 then println(s"Latex output generated in $workDir")
+      result

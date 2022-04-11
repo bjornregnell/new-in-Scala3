@@ -6,15 +6,17 @@ import scala.language.experimental.fewerBraces
 
 @main def run = slides.toPdf()
 
-def slides = document("Interesting Scala 3 goodies"):
+def slides = document("Scala 3 goodies"):
   frame("Goals"):
     itemize:
-     p("Showcase some of all the new things in Scala 3")
-     p("Help you get started with Scala")
-     p("Illustrated by a DSL for slides (these slides...)")
+      p("Showcase new things in Scala 3")
+      p("Help you get started with Scala")
+      p("Illustrated by Scala 3 DSL for these slides")
+      p("https://github.com/bjornregnell/new-in-Scala3")
 
-  frame("Example DSL implemented in Scala 3"):
-    code(select("slides.scala")("@main" -> "frame(\"Bac"))
+  frame("A slide DSL embedded in Scala 3"):
+    codeFrom("slides.scala"):
+      "frame" -> """frame("Background"""
 
   frame("Background: What is Scala?"):
     itemize:
@@ -96,3 +98,12 @@ def slides = document("Interesting Scala 3 goodies"):
         p("Can capture a capability: \\texttt{\\{c\\} A -> B}")
       p("...")
     p("https://dotty.epfl.ch/docs/reference/experimental/index.html")
+
+  frame("Final Slide: Thank you!"):
+    itemize:
+      p("https://www.scala-lang.org/")
+      p("https://scala-cli.virtuslab.org/")
+      p("https://www.scala-js.org/")
+      p("https://scala-native.readthedocs.io/en/latest/")
+      p("https://docs.scala-lang.org/scala3/new-in-scala3.html")
+      p("https://dotty.epfl.ch/docs/reference/experimental")
