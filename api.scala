@@ -21,9 +21,9 @@ extension (s: String) def saveTo(path: String): Unit =      // extension methods
 enum Tag:          // scalable enums, from simple to generic algebraic datatypes
   case Document, Frame, Itemize, Enumerate, Paragraph, Code
 
-export Tag.*            // tailor your namespace and api, no need for forwarders
+export Tag.* // tailor the namespace and api with export, no need for forwarders
 
-open class Tree(var tag: Tag, var value: String):   //open classes allow extends 
+class Tree(var tag: Tag, var value: String): 
   val sub = collection.mutable.Buffer[Tree]() 
 
 extension (t: Tree)                              // collective extension methods
