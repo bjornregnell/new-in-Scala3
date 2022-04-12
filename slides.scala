@@ -4,10 +4,10 @@ import scala.language.experimental.fewerBraces
 
 @main def run = slides.toPdf()
 
-def slides = document("Scala 3 goodies"):
+def slides = document("Scala 3 goodies"){
   frame("Goals"):
     itemize:
-      p("Showcase cool new things in Scala 3")
+      p("Showcase cool new stuff in Scala 3")
       p("Help you get started with Scala")
       p("Illustrated by Scala 3 DSL (for these slides...)")
       p("https://github.com/bjornregnell/new-in-Scala3")
@@ -114,3 +114,4 @@ def slides = document("Scala 3 goodies"):
       p("https://scala-native.readthedocs.io/en/latest/")
       p("https://docs.scala-lang.org/scala3/new-in-scala3.html")
       p("https://dotty.epfl.ch/docs/reference/experimental")
+}
