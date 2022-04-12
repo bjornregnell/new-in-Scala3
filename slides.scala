@@ -9,7 +9,7 @@ def slides = document("Scala 3 goodies"):
     itemize:
       p("Showcase cool new things in Scala 3")
       p("Help you get started with Scala")
-      p("Illustrated by Scala 3 DSL for these slides")
+      p("Illustrated by Scala 3 DSL (for these slides...)")
       p("https://github.com/bjornregnell/new-in-Scala3")
 
   frame("A slide DSL embedded in Scala 3"):
@@ -83,6 +83,15 @@ def slides = document("Scala 3 goodies"):
       p("**`extension`** methods")
       p("Explicit **`import`** of **`given`** values")
       p("A specific type class for conversions")
+
+  frame("Principled Meta-programming"):
+    itemize:
+      p("The new **`inline`** modifier *guarantees* inlining")
+      p("The `scala.compiletime` package provides compile-time ops over values")
+      p("Macros with quotes and splices")
+      p("Multi-stage programming")
+      p("TASTy reflection at runtime")
+    p("https://docs.scala-lang.org/scala3/reference/metaprogramming.html")  
 
   frame("Scala in the future"):
     p("On-going developments:")
