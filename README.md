@@ -6,7 +6,7 @@ See slides here:
 
 * https://github.com/bjornregnell/new-in-Scala3/releases/download/v1.0/out.pdf
 
-See api with Scala 3 examples here:
+See api with interesting new Scala 3 stuff in `// comments` here:
 
 * https://github.com/bjornregnell/new-in-Scala3/blob/main/api.scala
 
