@@ -90,7 +90,9 @@ def slides = document("Scala 3 goodies"):
       p("The `scala.compiletime` package provides compile-time ops over values")
       p("Macros with quotes and splices")
       p("Multi-stage programming")
-      p("TASTy reflecti{future"):
+      p("TASTy reflection"):
+
+  frame("Scala in the future"):
     p("On-going developments:")
     itemize:
       p("Explicit Nulls and limited flow typing")
