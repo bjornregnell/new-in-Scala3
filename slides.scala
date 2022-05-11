@@ -4,7 +4,7 @@ import scala.language.experimental.fewerBraces
 
 @main def run = slides.toPdf()
 
-def slides = document("Scala 3 goodies"){
+def slides = document("Scala 3 goodies"):
   frame("Goals"):
     itemize:
       p("Showcase cool new stuff in Scala 3")
@@ -90,10 +90,7 @@ def slides = document("Scala 3 goodies"){
       p("The `scala.compiletime` package provides compile-time ops over values")
       p("Macros with quotes and splices")
       p("Multi-stage programming")
-      p("TASTy reflection at runtime")
-    p("https://docs.scala-lang.org/scala3/reference/metaprogramming.html")  
-
-  frame("Scala in the future"):
+      p("TASTy reflecti{future"):
     p("On-going developments:")
     itemize:
       p("Explicit Nulls and limited flow typing")
@@ -114,4 +111,3 @@ def slides = document("Scala 3 goodies"){
       p("https://scala-native.readthedocs.io/en/latest/")
       p("https://docs.scala-lang.org/scala3/new-in-scala3.html")
       p("https://dotty.epfl.ch/docs/reference/experimental")
-}
