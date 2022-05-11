@@ -1,8 +1,14 @@
 # New in Scala3
 
-A quick tour of selected new stuff in Scala 3. See slides here:
+A quick tour of selected new stuff in Scala 3. Star it if you like it! :star:
+
+See slides here:
 
 * https://github.com/bjornregnell/new-in-Scala3/releases/download/v1.0/out.pdf
+
+See api with Scala 3 examples here:
+
+* https://github.com/bjornregnell/new-in-Scala3/blob/main/api.scala
 
 # How to build the slides
 
