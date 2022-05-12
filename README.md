@@ -12,7 +12,7 @@ See api with interesting new Scala concepts marked with `// comments` here:
 
 # How to build the slides
 
-* Clone this repo or download the `.scala` files.
+* Clone this repo or download the [zip-file](https://github.com/bjornregnell/new-in-Scala3/archive/refs/heads/main.zip) and unpack.
 
 * Install scala-cli from https://scala-cli.virtuslab.org/install
 
