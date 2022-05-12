@@ -42,20 +42,20 @@ extension (t: Tree)                              // collective extension methods
 
 case class Preamble(value: String)
 object Preamble:
-  given Preamble = loadPreamble()           //given values: cleaned-up implicits
+  given Preamble = loadPreamble()          // given values: cleaned-up implicits
 
   def loadPreamble() = Preamble(loadLines("preamble.tex").mkString("\n")) 
-end Preamble                           //end markers are checked by the compiler
+end Preamble                          // end markers are checked by the compiler
 
 type TreeContext = Tree ?=> Unit              // abstract over context functions
 
-def root(tag: Tag, value: String)(body: TreeContext): Tree =   //builder-pattern
+def root(tag: Tag, value: String)(body: TreeContext): Tree =  // builder-pattern
   given t: Tree = Tree(tag, value)
   body
   t
 
 def leaf(tag: Tag, value: String): TreeContext = 
-  summon[Tree].sub += Tree(tag, value)
+  summon[Tree].sub += Tree(tag, value)           // summon is the new implicitly
 
 def branch(tag: Tag, value: String = "")(body: TreeContext): TreeContext = 
   val subTree = Tree(tag, value)
