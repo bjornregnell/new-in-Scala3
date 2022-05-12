@@ -4,7 +4,7 @@ A quick tour of selected new stuff in Scala 3. Star it if you like it! :star:
 
 See slides here:
 
-* https://github.com/bjornregnell/new-in-Scala3/releases/download/v1.0/out.pdf
+* https://github.com/bjornregnell/new-in-Scala3/releases/download/v1.3/out.pdf
 
 See api with interesting new Scala concepts marked with `// comments` here:
 
