@@ -8,9 +8,9 @@ def slides = document("Scala 3 goodies"):
   frame("Goals"):
     itemize:
       p("Showcase cool new stuff in Scala 3")
-      p("Help you get started with Scala")
       p("Illustrated by Scala 3 DSL (for these slides...)")
-      p("https://github.com/bjornregnell/new-in-Scala3/")
+      p("See Scala 3 in action in `api.scala` here:")
+      p("https://github.com/bjornregnell/new-in-Scala3/")  
 
   frame("A slide DSL embedded in Scala 3"):
     codeFrom("slides.scala"):

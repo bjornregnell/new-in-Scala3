@@ -119,7 +119,7 @@ object Latex:
     beginEndPattern("\\*\\*") -> ("\\\\textbf{", "}", 1),
     beginEndPattern("\\*")    -> ("\\\\textit{", "}", 1),
     beginEndPattern("\\`")    -> ("\\\\texttt{", "}", 1),
-    urlPatter                 -> ("\\\\footnotesize{\\\\url{", "}}", 0)
+    urlPatter                 -> ("{\\\\footnotesize{\\\\url{", "}}}", 0)
   )
 
   extension (s: String) 
