@@ -18,7 +18,7 @@ extension (s: String) def saveTo(path: String): Unit =      // extension methods
     val pw = java.io.PrintWriter(java.io.File(path), "UTF-8")
     try pw.write(s) finally pw.close()
 
-enum Tag:          // scalable enums, from simple to generic algebraic datatypes
+enum Tag:    // scalable enums, from simple cases to generic algebraic datatypes
   case Document, Frame, Itemize, Enumerate, Paragraph, Code
 
 export Tag.* // tailor the namespace and api with export, no need for forwarders
