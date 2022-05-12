@@ -56,7 +56,7 @@ def slides = document("Scala 3 goodies"):
         p("Type lambas")
         p("Context functions")
       p("Make migration as smooth as possible")
-    p("https://docs.scala-lang.org/scala3/reference/overview.html")
+    p("https://docs.scala-lang.org/scala3/reference/")
 
   frame("Scala 3 goodies for learners (and you?)"):
     p("An even better tool for teaching and learning:")
