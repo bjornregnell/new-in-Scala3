@@ -10,7 +10,7 @@ def slides = document("Scala 3 goodies"):
       p("Showcase cool new stuff in Scala 3")
       p("Help you get started with Scala")
       p("Illustrated by Scala 3 DSL (for these slides...)")
-      p("https://github.com/bjornregnell/new-in-Scala3")
+      p("https://github.com/bjornregnell/new-in-Scala3/")
 
   frame("A slide DSL embedded in Scala 3"):
     codeFrom("slides.scala"):
@@ -111,5 +111,5 @@ def slides = document("Scala 3 goodies"):
       p("https://scala-cli.virtuslab.org/")
       p("https://www.scala-js.org/")
       p("https://scala-native.readthedocs.io/en/latest/")
-      p("https://docs.scala-lang.org/scala3")
-      p("https://dotty.epfl.ch/docs/reference/experimental")
+      p("https://docs.scala-lang.org/scala3/")
+      p("https://dotty.epfl.ch/docs/reference/experimental/")
