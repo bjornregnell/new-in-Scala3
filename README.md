@@ -1,4 +1,4 @@
-# New in Scala3
+# New in Scala 3
 
 A quick tour of selected new stuff in Scala 3. Star it if you like it! :star:
 
