@@ -113,13 +113,13 @@ object Latex:
     s"\n\\begin{$environment}${brackets(bracketArgs*)}${braces(braceArgs*)}\n$body\n\\end{$environment}\n\n"
 
   def beginEndPattern(s: String) = s"$s([^$s]*)$s".r
-  def urlPatter = "\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]".r
+  def urlPattern = "\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]".r
 
   val replacePatterns = Map[util.matching.Regex, (String, String, Int)](
     beginEndPattern("\\*\\*") -> ("\\\\textbf{", "}", 1),
     beginEndPattern("\\*")    -> ("\\\\textit{", "}", 1),
     beginEndPattern("\\`")    -> ("\\\\texttt{", "}", 1),
-    urlPatter                 -> ("{\\\\footnotesize{\\\\url{", "}}}", 0)
+    urlPattern                -> ("{\\\\footnotesize{\\\\url{", "}}}", 0)
   )
 
   extension (s: String) 
