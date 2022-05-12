@@ -107,9 +107,10 @@ def slides = document("Scala 3 goodies"):
 
   frame("Final Slide: Thank you!"):
     itemize:
+      p("https://github.com/bjornregnell/new-in-Scala3/")
       p("https://www.scala-lang.org/")
+      p("https://docs.scala-lang.org/scala3/")
+      p("https://dotty.epfl.ch/docs/reference/experimental/")
       p("https://scala-cli.virtuslab.org/")
       p("https://www.scala-js.org/")
       p("https://scala-native.readthedocs.io/en/latest/")
-      p("https://docs.scala-lang.org/scala3/")
-      p("https://dotty.epfl.ch/docs/reference/experimental/")
