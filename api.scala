@@ -113,18 +113,20 @@ object Latex:
     s"\n\\begin{$environment}${brackets(bracketArgs*)}${braces(braceArgs*)}\n$body\n\\end{$environment}\n\n"
 
   def beginEndPattern(s: String) = s"$s([^$s]*)$s".r
+  def urlPatter = "\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]".r
 
-  val replacePatterns = Map[util.matching.Regex, (String, String)](
-    beginEndPattern("\\*\\*") -> ("\\\\textbf{", "}"),
-    beginEndPattern("\\*")    -> ("\\\\textit{", "}"),
-    beginEndPattern("\\`")    -> ("\\\\texttt{", "}"),
+  val replacePatterns = Map[util.matching.Regex, (String, String, Int)](
+    beginEndPattern("\\*\\*") -> ("\\\\textbf{", "}", 1),
+    beginEndPattern("\\*")    -> ("\\\\textit{", "}", 1),
+    beginEndPattern("\\`")    -> ("\\\\texttt{", "}", 1),
+    urlPatter                 -> ("\\\\footnotesize{\\\\url{", "}}", 0)
   )
 
   extension (s: String) 
     def replaceAllMarkers: String = 
       var result = s
-      for (pattern, (b, e)) <- replacePatterns do
-        result = pattern.replaceAllIn(result, m => s"$b${m.group(1)}$e")
+      for (pattern, (b, e, g)) <- replacePatterns do
+        result = pattern.replaceAllIn(result, m => s"$b${m.group(g)}$e")
       result
 
     def minimizeMargin: String = 
@@ -138,8 +140,8 @@ object Latex:
     createDirs(workDir)
     (pre.value ++ tree.toLatex).saveTo(s"$workDir/$out.tex")
     val wd = java.io.File(workDir)
-      val proc = OSProc(Seq("latexmk", "-pdf", "-cd", "-halt-on-error", "-silent", s"$out.tex"), wd)
-      val procOutputFile = java.io.File(s"$workDir/$out.log")
-      val result = proc.#>(procOutputFile).run.exitValue
-      if result == 0 then println(s"Latex output generated in $workDir")
-      result
+    val proc = OSProc(Seq("latexmk", "-pdf", "-cd", "-halt-on-error", "-silent", s"$out.tex"), wd)
+    val procOutputFile = java.io.File(s"$workDir/$out.log")
+    val result = proc.#>(procOutputFile).run.exitValue
+    if result == 0 then println(s"Latex output generated in $workDir")
+    result
