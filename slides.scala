@@ -69,7 +69,7 @@ def slides = document("Scala 3 goodies"):
       p("@main functions with type-safe parameters")
       p("Universal apply")
       p("Export")
-    p("https://docs.scala-lang.org/scala3/reference/overview.html")
+    p("https://docs.scala-lang.org/scala3/reference/")
 
   frame("Cleaned-up implicits"):
     p("Implicits in Scala 2: very powerful but criticized")
