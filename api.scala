@@ -136,7 +136,7 @@ object Latex:
   end extension
  
   def make(tree: Tree, out: String, workDir: String)(using pre: Preamble): Int = 
-    import scala.sys.process.{Process  => OSProc}               // rename import
+    import scala.sys.process.{Process as OSProc}        // rename import with as
     createDirs(workDir)
     (pre.value ++ tree.toLatex).saveTo(s"$workDir/$out.tex")
     val wd = java.io.File(workDir)
