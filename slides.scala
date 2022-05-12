@@ -90,7 +90,7 @@ def slides = document("Scala 3 goodies"):
       p("The `scala.compiletime` package provides compile-time ops over values")
       p("Macros with quotes and splices")
       p("Multi-stage programming")
-      p("TASTy reflection"):
+      p("TASTy reflection")
 
   frame("Scala in the future"):
     p("On-going developments:")
@@ -103,7 +103,7 @@ def slides = document("Scala 3 goodies"):
         p("Pure function type: ~~~~`A -> B`")
         p("Can capture a capability: \\texttt{\\{c\\} A -> B}")
       p("...")
-    p("https://dotty.epfl.ch/docs/reference/experimental/index.html")
+    p("https://dotty.epfl.ch/docs/reference/experimental/")
 
   frame("Final Slide: Thank you!"):
     itemize:
@@ -111,5 +111,5 @@ def slides = document("Scala 3 goodies"):
       p("https://scala-cli.virtuslab.org/")
       p("https://www.scala-js.org/")
       p("https://scala-native.readthedocs.io/en/latest/")
-      p("https://docs.scala-lang.org/scala3/new-in-scala3.html")
+      p("https://docs.scala-lang.org/scala3")
       p("https://dotty.epfl.ch/docs/reference/experimental")
